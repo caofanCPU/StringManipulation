@@ -12,7 +12,7 @@ public class WordsCamelCaseToWordsAction extends AbstractStringManipAction<Objec
         super(setupHandler);
     }
 
-	@Override
+    @Override
     public String transformByLine(Map<String, Object> actionContext, String s) {
         String res = "";
         for (int i = 0; i < s.length(); i++) {

@@ -6,8 +6,6 @@ import com.intellij.openapi.editor.CaretAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.UnprotectedUserDataHolder;
-import com.intellij.openapi.util.UserDataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import shaded.org.apache.commons.lang3.StringUtils;
@@ -21,109 +19,109 @@ import java.util.Map;
  */
 public abstract class AbstractStringManipAction<T> extends MyEditorAction {
 
-	protected final boolean setupHandler;
-	protected MyEditorWriteActionHandler<T> myHandler = null;
+    protected final boolean setupHandler;
+    protected MyEditorWriteActionHandler<T> myHandler = null;
 
-	protected AbstractStringManipAction() {
-		this(true);
-	}
+    protected AbstractStringManipAction() {
+        this(true);
+    }
 
-	protected AbstractStringManipAction(boolean setupHandler) {
-		super(null);
-		if (setupHandler) {
-			this.setupHandler(myHandler = new MyEditorWriteActionHandler<T>(getActionClass()) {
-				@NotNull
-				@Override
-				protected Pair<Boolean, T> beforeWriteAction(Editor editor, DataContext dataContext) {
-					return AbstractStringManipAction.this.beforeWriteAction(editor, dataContext);
-				}
+    protected AbstractStringManipAction(boolean setupHandler) {
+        super(null);
+        if (setupHandler) {
+            this.setupHandler(myHandler = new MyEditorWriteActionHandler<T>(getActionClass()) {
+                @NotNull
+                @Override
+                protected Pair<Boolean, T> beforeWriteAction(Editor editor, DataContext dataContext) {
+                    return AbstractStringManipAction.this.beforeWriteAction(editor, dataContext);
+                }
 
-				@Override
-				protected void executeWriteAction(Editor editor, @Nullable Caret caret, final DataContext dataContext, final T additionalParam) {
-					executeMyWriteAction(editor, dataContext, additionalParam);
-				}
+                @Override
+                protected void executeWriteAction(Editor editor, @Nullable Caret caret, final DataContext dataContext, final T additionalParam) {
+                    executeMyWriteAction(editor, dataContext, additionalParam);
+                }
 
-			});
-		}
-		this.setupHandler = setupHandler;
-	}
+            });
+        }
+        this.setupHandler = setupHandler;
+    }
 
-	@NotNull
-	public Pair<Boolean, T> beforeWriteAction(Editor editor, DataContext dataContext) {
-		return new Pair<Boolean, T>(true, null);
-	}
+    @NotNull
+    public Pair<Boolean, T> beforeWriteAction(Editor editor, DataContext dataContext) {
+        return new Pair<Boolean, T>(true, null);
+    }
 
-	protected final Pair<Boolean, T> stopExecution() {
-		return new Pair<Boolean, T>(false, null);
-	}
+    protected final Pair<Boolean, T> stopExecution() {
+        return new Pair<Boolean, T>(false, null);
+    }
 
-	protected final Pair<Boolean, T> continueExecution(T param) {
-		return new Pair<Boolean, T>(true, param);
-	}
+    protected final Pair<Boolean, T> continueExecution(T param) {
+        return new Pair<Boolean, T>(true, param);
+    }
 
-	protected final Pair<Boolean, T> continueExecution() {
-		return new Pair<Boolean, T>(true, null);
-	}
+    protected final Pair<Boolean, T> continueExecution() {
+        return new Pair<Boolean, T>(true, null);
+    }
 
-	protected void executeMyWriteAction(Editor editor, final DataContext dataContext, final T additionalParam) {
-		Map<String, Object> actionContext = new HashMap<>();
-		editor.getCaretModel().runForEachCaret(new CaretAction() {
-			@Override
-			public void perform(Caret caret) {
-				executeMyWriteActionPerCaret(caret.getEditor(), caret, actionContext, dataContext, additionalParam);
-			}
-		});
-	}
+    protected void executeMyWriteAction(Editor editor, final DataContext dataContext, final T additionalParam) {
+        Map<String, Object> actionContext = new HashMap<>();
+        editor.getCaretModel().runForEachCaret(new CaretAction() {
+            @Override
+            public void perform(Caret caret) {
+                executeMyWriteActionPerCaret(caret.getEditor(), caret, actionContext, dataContext, additionalParam);
+            }
+        });
+    }
 
-	protected void executeMyWriteActionPerCaret(Editor editor, Caret caret, Map<String, Object> actionContext, DataContext dataContext, T additionalParam) {
-		final SelectionModel selectionModel = editor.getSelectionModel();
-		String selectedText = selectionModel.getSelectedText();
+    protected void executeMyWriteActionPerCaret(Editor editor, Caret caret, Map<String, Object> actionContext, DataContext dataContext, T additionalParam) {
+        final SelectionModel selectionModel = editor.getSelectionModel();
+        String selectedText = selectionModel.getSelectedText();
 
-		if (selectedText == null) {
-			selectSomethingUnderCaret(editor, dataContext, selectionModel);
-			selectedText = selectionModel.getSelectedText();
+        if (selectedText == null) {
+            selectSomethingUnderCaret(editor, dataContext, selectionModel);
+            selectedText = selectionModel.getSelectedText();
 
-			if (selectedText == null) {
-				return;
-			}
-		}
+            if (selectedText == null) {
+                return;
+            }
+        }
 
-		String s = transformSelection(editor, actionContext, dataContext, selectedText, additionalParam);
-		s = s.replace("\r\n", "\n");
-		s = s.replace("\r", "\n");
+        String s = transformSelection(editor, actionContext, dataContext, selectedText, additionalParam);
+        s = s.replace("\r\n", "\n");
+        s = s.replace("\r", "\n");
         editor.getDocument().replaceString(selectionModel.getSelectionStart(), selectionModel.getSelectionEnd(), s);
     }
 
 
-	protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, T additionalParam) {
-		String[] textParts = selectedText.split("\n");
+    protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, T additionalParam) {
+        String[] textParts = selectedText.split("\n");
 
-		for (int i = 0; i < textParts.length; i++) {
-			if (!StringUtils.isBlank(textParts[i])) {
-				textParts[i] = transformByLine(actionContext, textParts[i]);
-			}
-		}
+        for (int i = 0; i < textParts.length; i++) {
+            if (!StringUtils.isBlank(textParts[i])) {
+                textParts[i] = transformByLine(actionContext, textParts[i]);
+            }
+        }
 
-		String join = StringUtils.join(textParts, '\n');
+        String join = StringUtils.join(textParts, '\n');
 
-		if (selectedText.endsWith("\n")) {
-			return join + "\n";
-		}
-		return join;
-	}
+        if (selectedText.endsWith("\n")) {
+            return join + "\n";
+        }
+        return join;
+    }
 
-	protected boolean selectSomethingUnderCaret(Editor editor, DataContext dataContext, SelectionModel selectionModel) {
-		selectionModel.selectLineAtCaret();
-		String selectedText = selectionModel.getSelectedText();
-		if (selectedText != null && selectedText.endsWith("\n")) {
-			selectionModel.setSelection(selectionModel.getSelectionStart(), selectionModel.getSelectionEnd() - 1);
-		}
-		return true;
-	}
+    protected boolean selectSomethingUnderCaret(Editor editor, DataContext dataContext, SelectionModel selectionModel) {
+        selectionModel.selectLineAtCaret();
+        String selectedText = selectionModel.getSelectedText();
+        if (selectedText != null && selectedText.endsWith("\n")) {
+            selectionModel.setSelection(selectionModel.getSelectionStart(), selectionModel.getSelectionEnd() - 1);
+        }
+        return true;
+    }
 
-	public final String transformByLine( String s) {
-		return transformByLine(new HashMap<>(),s );
-	}
+    public final String transformByLine(String s) {
+        return transformByLine(new HashMap<>(), s);
+    }
 
-	public abstract String transformByLine(Map<String, Object> actionContext, String s);
+    public abstract String transformByLine(Map<String, Object> actionContext, String s);
 }

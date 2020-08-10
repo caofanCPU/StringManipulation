@@ -17,57 +17,58 @@ import shaded.org.apache.commons.lang3.StringUtils;
  */
 public class DecrementAction extends MyEditorAction {
 
-	public DecrementAction(boolean setupHandler) {
-		super(null);
-		if (setupHandler) {
-			this.setupHandler(new EditorWriteActionHandler(true) {
-				@Override
-				public void executeWriteAction(Editor editor, DataContext dataContext) {
-					MyApplicationService.setAction(getActionClass());
+    public DecrementAction(boolean setupHandler) {
+        super(null);
+        if (setupHandler) {
+            this.setupHandler(new EditorWriteActionHandler(true) {
+                @Override
+                public void executeWriteAction(Editor editor, DataContext dataContext) {
+                    MyApplicationService.setAction(getActionClass());
 
-					// Column mode not supported
-					if (editor.isColumnMode()) {
-						return;
-					}
-					final CaretModel caretModel = editor.getCaretModel();
+                    // Column mode not supported
+                    if (editor.isColumnMode()) {
+                        return;
+                    }
+                    final CaretModel caretModel = editor.getCaretModel();
 
-					final int line = caretModel.getLogicalPosition().line;
-					final int column = caretModel.getLogicalPosition().column;
-					int caretOffset = caretModel.getOffset();
+                    final int line = caretModel.getLogicalPosition().line;
+                    final int column = caretModel.getLogicalPosition().column;
+                    int caretOffset = caretModel.getOffset();
 
-					final SelectionModel selectionModel = editor.getSelectionModel();
-					boolean hasSelection = selectionModel.hasSelection();
-					if (hasSelection == false) {
-						selectionModel.selectLineAtCaret();
-					}
-					final String selectedText = selectionModel.getSelectedText();
+                    final SelectionModel selectionModel = editor.getSelectionModel();
+                    boolean hasSelection = selectionModel.hasSelection();
+                    if (hasSelection == false) {
+                        selectionModel.selectLineAtCaret();
+                    }
+                    final String selectedText = selectionModel.getSelectedText();
 
-					if (selectedText != null) {
-						final String newText = processSelection(selectedText);
-						applyChanges(editor, caretModel, line, column, selectionModel, hasSelection, newText, caretOffset);
-					}
-				}
-			});
-		}
-	}
+                    if (selectedText != null) {
+                        final String newText = processSelection(selectedText);
+                        applyChanges(editor, caretModel, line, column, selectionModel, hasSelection, newText, caretOffset);
+                    }
+                }
+            });
+        }
+    }
 
-	@NotNull
-	protected String processSelection(String selectedText) {
-		String[] textParts = StringUtil.splitPreserveAllTokens(selectedText, UniversalNumber.UNIVERSAL_NUMBER_REGEX);
-		for (int i = 0; i < textParts.length; i++) {
-			textParts[i] = new UniversalNumber(textParts[i]).decrement();
-		}
+    public DecrementAction() {
+        this(true);
+    }
 
-		return StringUtils.join(textParts);
-	}
+    @NotNull
+    protected String processSelection(String selectedText) {
+        String[] textParts = StringUtil.splitPreserveAllTokens(selectedText, UniversalNumber.UNIVERSAL_NUMBER_REGEX);
+        for (int i = 0; i < textParts.length; i++) {
+            textParts[i] = new UniversalNumber(textParts[i]).decrement();
+        }
 
-	public DecrementAction() {
-		this(true);
-	}
+        return StringUtils.join(textParts);
+    }
 
-	protected void applyChanges(Editor editor, CaretModel caretModel, int line, int column,
-								SelectionModel selectionModel, boolean hasSelection, String newText, int caretOffset) {
-		editor.getDocument().replaceString(selectionModel.getSelectionStart(), selectionModel.getSelectionEnd(),
-				newText);
-	}
+    protected void applyChanges(
+            Editor editor, CaretModel caretModel, int line, int column,
+            SelectionModel selectionModel, boolean hasSelection, String newText, int caretOffset) {
+        editor.getDocument().replaceString(selectionModel.getSelectionStart(), selectionModel.getSelectionEnd(),
+                newText);
+    }
 }

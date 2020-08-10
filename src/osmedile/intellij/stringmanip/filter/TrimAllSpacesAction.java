@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class TrimAllSpacesAction extends AbstractStringManipAction<Object> {
 
-	@Override
+    @Override
     public String transformByLine(Map<String, Object> actionContext, String s) {
         return StringUtil.trimAllSpace(s);
     }

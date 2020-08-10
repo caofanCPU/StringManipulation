@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class EscapeXMLAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		return StringEscapeUtils.escapeXml11(s);
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        return StringEscapeUtils.escapeXml11(s);
     }
 }

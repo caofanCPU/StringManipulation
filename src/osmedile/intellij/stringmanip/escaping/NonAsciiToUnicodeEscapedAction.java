@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class NonAsciiToUnicodeEscapedAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
         return StringUtil.nonAsciiToUnicode(s);
     }
 }

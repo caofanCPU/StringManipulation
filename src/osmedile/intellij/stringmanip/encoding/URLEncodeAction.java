@@ -13,14 +13,14 @@ import java.util.Map;
  */
 public class URLEncodeAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, Object additionalParam) {
-		return EncodingUtils.encodeUrl(selectedText);
-	}
+    @Override
+    protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, Object additionalParam) {
+        return EncodingUtils.encodeUrl(selectedText);
+    }
 
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -11,32 +11,32 @@ import osmedile.intellij.stringmanip.MyEditorWriteActionHandler;
 
 public class SwapAction extends MyEditorAction {
 
-	String lastSeparator = ",";
+    String lastSeparator = ",";
 
-	protected SwapAction() {
-		super(null);
-		this.setupHandler(new MyEditorWriteActionHandler<SwapActionExecutor>(getActionClass()) {
+    protected SwapAction() {
+        super(null);
+        this.setupHandler(new MyEditorWriteActionHandler<SwapActionExecutor>(getActionClass()) {
 
-			@NotNull
-			protected Pair<Boolean, SwapActionExecutor> beforeWriteAction(Editor editor, DataContext dataContext) {
-				SwapActionExecutor swapActionExecutor = new SwapActionExecutor(editor, dataContext, lastSeparator);
-				if (swapActionExecutor.isSwappingTokens()) {
-					String separator = swapActionExecutor.chooseSeparator();
-					if (separator == null) {
-						return stopExecution();
-					} else {
-						lastSeparator = separator;
-					} 
-				}
-				return continueExecution(swapActionExecutor);
-			}
+            @NotNull
+            protected Pair<Boolean, SwapActionExecutor> beforeWriteAction(Editor editor, DataContext dataContext) {
+                SwapActionExecutor swapActionExecutor = new SwapActionExecutor(editor, dataContext, lastSeparator);
+                if (swapActionExecutor.isSwappingTokens()) {
+                    String separator = swapActionExecutor.chooseSeparator();
+                    if (separator == null) {
+                        return stopExecution();
+                    } else {
+                        lastSeparator = separator;
+                    }
+                }
+                return continueExecution(swapActionExecutor);
+            }
 
-			@Override
-			protected void executeWriteAction(Editor editor, @Nullable Caret caret, DataContext dataContext, SwapActionExecutor swapActionExecutor) {
-				swapActionExecutor.execute();
-			}
+            @Override
+            protected void executeWriteAction(Editor editor, @Nullable Caret caret, DataContext dataContext, SwapActionExecutor swapActionExecutor) {
+                swapActionExecutor.execute();
+            }
 
-		});
-	}
+        });
+    }
 
 }

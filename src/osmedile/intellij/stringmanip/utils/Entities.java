@@ -42,124 +42,132 @@ import java.util.TreeMap;
 @Deprecated
 class Entities {
 
-    private static final String[][] BASIC_ARRAY = {{"quot", "34"}, // " - double-quote
-                                                   {"amp", "38"}, // & - ampersand
-                                                   {"lt", "60"}, // < - less-than
-                                                   {"gt", "62"}, // > - greater-than
-    };
-
-    private static final String[][] APOS_ARRAY = {{"apos", "39"}, // XML apostrophe
-    };
-
+    /**
+     * <p>
+     * The set of entities supported by standard XML.
+     * </p>
+     */
+    public static final Entities XML;
+    /**
+     * <p>
+     * The set of entities supported by HTML 3.2.
+     * </p>
+     */
+    public static final Entities HTML32;
+    /**
+     * <p>
+     * The set of entities supported by HTML 4.0.
+     * </p>
+     */
+    public static final Entities HTML40;
     // package scoped for testing
     static final String[][] ISO8859_1_ARRAY = {{"nbsp", "160"}, // non-breaking space
-                                               {"iexcl", "161"}, // inverted exclamation mark
-                                               {"cent", "162"}, // cent sign
-                                               {"pound", "163"}, // pound sign
-                                               {"curren", "164"}, // currency sign
-                                               {"yen", "165"}, // yen sign = yuan sign
-                                               {"brvbar", "166"}, // broken bar = broken vertical bar
-                                               {"sect", "167"}, // section sign
-                                               {"uml", "168"}, // diaeresis = spacing diaeresis
-                                               {"copy", "169"}, // � - copyright sign
-                                               {"ordf", "170"}, // feminine ordinal indicator
-                                               {"laquo", "171"},
-                                               // left-pointing double angle quotation mark = left pointing guillemet
-                                               {"not", "172"}, // not sign
-                                               {"shy", "173"}, // soft hyphen = discretionary hyphen
-                                               {"reg", "174"}, // � - registered trademark sign
-                                               {"macr", "175"},
-                                               // macron = spacing macron = overline = APL overbar
-                                               {"deg", "176"}, // degree sign
-                                               {"plusmn", "177"}, // plus-minus sign = plus-or-minus sign
-                                               {"sup2", "178"},
-                                               // superscript two = superscript digit two = squared
-                                               {"sup3", "179"},
-                                               // superscript three = superscript digit three = cubed
-                                               {"acute", "180"}, // acute accent = spacing acute
-                                               {"micro", "181"}, // micro sign
-                                               {"para", "182"}, // pilcrow sign = paragraph sign
-                                               {"middot", "183"},
-                                               // middle dot = Georgian comma = Greek middle dot
-                                               {"cedil", "184"}, // cedilla = spacing cedilla
-                                               {"sup1", "185"}, // superscript one = superscript digit one
-                                               {"ordm", "186"}, // masculine ordinal indicator
-                                               {"raquo", "187"},
-                                               // right-pointing double angle quotation mark = right pointing guillemet
-                                               {"frac14", "188"},
-                                               // vulgar fraction one quarter = fraction one quarter
-                                               {"frac12", "189"},
-                                               // vulgar fraction one half = fraction one half
-                                               {"frac34", "190"},
-                                               // vulgar fraction three quarters = fraction three quarters
-                                               {"iquest", "191"},
-                                               // inverted question mark = turned question mark
-                                               {"Agrave", "192"}, // � - uppercase A, grave accent
-                                               {"Aacute", "193"}, // � - uppercase A, acute accent
-                                               {"Acirc", "194"}, // � - uppercase A, circumflex accent
-                                               {"Atilde", "195"}, // � - uppercase A, tilde
-                                               {"Auml", "196"}, // � - uppercase A, umlaut
-                                               {"Aring", "197"}, // � - uppercase A, ring
-                                               {"AElig", "198"}, // � - uppercase AE
-                                               {"Ccedil", "199"}, // � - uppercase C, cedilla
-                                               {"Egrave", "200"}, // � - uppercase E, grave accent
-                                               {"Eacute", "201"}, // � - uppercase E, acute accent
-                                               {"Ecirc", "202"}, // � - uppercase E, circumflex accent
-                                               {"Euml", "203"}, // � - uppercase E, umlaut
-                                               {"Igrave", "204"}, // � - uppercase I, grave accent
-                                               {"Iacute", "205"}, // � - uppercase I, acute accent
-                                               {"Icirc", "206"}, // � - uppercase I, circumflex accent
-                                               {"Iuml", "207"}, // � - uppercase I, umlaut
-                                               {"ETH", "208"}, // � - uppercase Eth, Icelandic
-                                               {"Ntilde", "209"}, // � - uppercase N, tilde
-                                               {"Ograve", "210"}, // � - uppercase O, grave accent
-                                               {"Oacute", "211"}, // � - uppercase O, acute accent
-                                               {"Ocirc", "212"}, // � - uppercase O, circumflex accent
-                                               {"Otilde", "213"}, // � - uppercase O, tilde
-                                               {"Ouml", "214"}, // � - uppercase O, umlaut
-                                               {"times", "215"}, // multiplication sign
-                                               {"Oslash", "216"}, // � - uppercase O, slash
-                                               {"Ugrave", "217"}, // � - uppercase U, grave accent
-                                               {"Uacute", "218"}, // � - uppercase U, acute accent
-                                               {"Ucirc", "219"}, // � - uppercase U, circumflex accent
-                                               {"Uuml", "220"}, // � - uppercase U, umlaut
-                                               {"Yacute", "221"}, // � - uppercase Y, acute accent
-                                               {"THORN", "222"}, // � - uppercase THORN, Icelandic
-                                               {"szlig", "223"}, // � - lowercase sharps, German
-                                               {"agrave", "224"}, // � - lowercase a, grave accent
-                                               {"aacute", "225"}, // � - lowercase a, acute accent
-                                               {"acirc", "226"}, // � - lowercase a, circumflex accent
-                                               {"atilde", "227"}, // � - lowercase a, tilde
-                                               {"auml", "228"}, // � - lowercase a, umlaut
-                                               {"aring", "229"}, // � - lowercase a, ring
-                                               {"aelig", "230"}, // � - lowercase ae
-                                               {"ccedil", "231"}, // � - lowercase c, cedilla
-                                               {"egrave", "232"}, // � - lowercase e, grave accent
-                                               {"eacute", "233"}, // � - lowercase e, acute accent
-                                               {"ecirc", "234"}, // � - lowercase e, circumflex accent
-                                               {"euml", "235"}, // � - lowercase e, umlaut
-                                               {"igrave", "236"}, // � - lowercase i, grave accent
-                                               {"iacute", "237"}, // � - lowercase i, acute accent
-                                               {"icirc", "238"}, // � - lowercase i, circumflex accent
-                                               {"iuml", "239"}, // � - lowercase i, umlaut
-                                               {"eth", "240"}, // � - lowercase eth, Icelandic
-                                               {"ntilde", "241"}, // � - lowercase n, tilde
-                                               {"ograve", "242"}, // � - lowercase o, grave accent
-                                               {"oacute", "243"}, // � - lowercase o, acute accent
-                                               {"ocirc", "244"}, // � - lowercase o, circumflex accent
-                                               {"otilde", "245"}, // � - lowercase o, tilde
-                                               {"ouml", "246"}, // � - lowercase o, umlaut
-                                               {"divide", "247"}, // division sign
-                                               {"oslash", "248"}, // � - lowercase o, slash
-                                               {"ugrave", "249"}, // � - lowercase u, grave accent
-                                               {"uacute", "250"}, // � - lowercase u, acute accent
-                                               {"ucirc", "251"}, // � - lowercase u, circumflex accent
-                                               {"uuml", "252"}, // � - lowercase u, umlaut
-                                               {"yacute", "253"}, // � - lowercase y, acute accent
-                                               {"thorn", "254"}, // � - lowercase thorn, Icelandic
-                                               {"yuml", "255"}, // � - lowercase y, umlaut
+            {"iexcl", "161"}, // inverted exclamation mark
+            {"cent", "162"}, // cent sign
+            {"pound", "163"}, // pound sign
+            {"curren", "164"}, // currency sign
+            {"yen", "165"}, // yen sign = yuan sign
+            {"brvbar", "166"}, // broken bar = broken vertical bar
+            {"sect", "167"}, // section sign
+            {"uml", "168"}, // diaeresis = spacing diaeresis
+            {"copy", "169"}, // � - copyright sign
+            {"ordf", "170"}, // feminine ordinal indicator
+            {"laquo", "171"},
+            // left-pointing double angle quotation mark = left pointing guillemet
+            {"not", "172"}, // not sign
+            {"shy", "173"}, // soft hyphen = discretionary hyphen
+            {"reg", "174"}, // � - registered trademark sign
+            {"macr", "175"},
+            // macron = spacing macron = overline = APL overbar
+            {"deg", "176"}, // degree sign
+            {"plusmn", "177"}, // plus-minus sign = plus-or-minus sign
+            {"sup2", "178"},
+            // superscript two = superscript digit two = squared
+            {"sup3", "179"},
+            // superscript three = superscript digit three = cubed
+            {"acute", "180"}, // acute accent = spacing acute
+            {"micro", "181"}, // micro sign
+            {"para", "182"}, // pilcrow sign = paragraph sign
+            {"middot", "183"},
+            // middle dot = Georgian comma = Greek middle dot
+            {"cedil", "184"}, // cedilla = spacing cedilla
+            {"sup1", "185"}, // superscript one = superscript digit one
+            {"ordm", "186"}, // masculine ordinal indicator
+            {"raquo", "187"},
+            // right-pointing double angle quotation mark = right pointing guillemet
+            {"frac14", "188"},
+            // vulgar fraction one quarter = fraction one quarter
+            {"frac12", "189"},
+            // vulgar fraction one half = fraction one half
+            {"frac34", "190"},
+            // vulgar fraction three quarters = fraction three quarters
+            {"iquest", "191"},
+            // inverted question mark = turned question mark
+            {"Agrave", "192"}, // � - uppercase A, grave accent
+            {"Aacute", "193"}, // � - uppercase A, acute accent
+            {"Acirc", "194"}, // � - uppercase A, circumflex accent
+            {"Atilde", "195"}, // � - uppercase A, tilde
+            {"Auml", "196"}, // � - uppercase A, umlaut
+            {"Aring", "197"}, // � - uppercase A, ring
+            {"AElig", "198"}, // � - uppercase AE
+            {"Ccedil", "199"}, // � - uppercase C, cedilla
+            {"Egrave", "200"}, // � - uppercase E, grave accent
+            {"Eacute", "201"}, // � - uppercase E, acute accent
+            {"Ecirc", "202"}, // � - uppercase E, circumflex accent
+            {"Euml", "203"}, // � - uppercase E, umlaut
+            {"Igrave", "204"}, // � - uppercase I, grave accent
+            {"Iacute", "205"}, // � - uppercase I, acute accent
+            {"Icirc", "206"}, // � - uppercase I, circumflex accent
+            {"Iuml", "207"}, // � - uppercase I, umlaut
+            {"ETH", "208"}, // � - uppercase Eth, Icelandic
+            {"Ntilde", "209"}, // � - uppercase N, tilde
+            {"Ograve", "210"}, // � - uppercase O, grave accent
+            {"Oacute", "211"}, // � - uppercase O, acute accent
+            {"Ocirc", "212"}, // � - uppercase O, circumflex accent
+            {"Otilde", "213"}, // � - uppercase O, tilde
+            {"Ouml", "214"}, // � - uppercase O, umlaut
+            {"times", "215"}, // multiplication sign
+            {"Oslash", "216"}, // � - uppercase O, slash
+            {"Ugrave", "217"}, // � - uppercase U, grave accent
+            {"Uacute", "218"}, // � - uppercase U, acute accent
+            {"Ucirc", "219"}, // � - uppercase U, circumflex accent
+            {"Uuml", "220"}, // � - uppercase U, umlaut
+            {"Yacute", "221"}, // � - uppercase Y, acute accent
+            {"THORN", "222"}, // � - uppercase THORN, Icelandic
+            {"szlig", "223"}, // � - lowercase sharps, German
+            {"agrave", "224"}, // � - lowercase a, grave accent
+            {"aacute", "225"}, // � - lowercase a, acute accent
+            {"acirc", "226"}, // � - lowercase a, circumflex accent
+            {"atilde", "227"}, // � - lowercase a, tilde
+            {"auml", "228"}, // � - lowercase a, umlaut
+            {"aring", "229"}, // � - lowercase a, ring
+            {"aelig", "230"}, // � - lowercase ae
+            {"ccedil", "231"}, // � - lowercase c, cedilla
+            {"egrave", "232"}, // � - lowercase e, grave accent
+            {"eacute", "233"}, // � - lowercase e, acute accent
+            {"ecirc", "234"}, // � - lowercase e, circumflex accent
+            {"euml", "235"}, // � - lowercase e, umlaut
+            {"igrave", "236"}, // � - lowercase i, grave accent
+            {"iacute", "237"}, // � - lowercase i, acute accent
+            {"icirc", "238"}, // � - lowercase i, circumflex accent
+            {"iuml", "239"}, // � - lowercase i, umlaut
+            {"eth", "240"}, // � - lowercase eth, Icelandic
+            {"ntilde", "241"}, // � - lowercase n, tilde
+            {"ograve", "242"}, // � - lowercase o, grave accent
+            {"oacute", "243"}, // � - lowercase o, acute accent
+            {"ocirc", "244"}, // � - lowercase o, circumflex accent
+            {"otilde", "245"}, // � - lowercase o, tilde
+            {"ouml", "246"}, // � - lowercase o, umlaut
+            {"divide", "247"}, // division sign
+            {"oslash", "248"}, // � - lowercase o, slash
+            {"ugrave", "249"}, // � - lowercase u, grave accent
+            {"uacute", "250"}, // � - lowercase u, acute accent
+            {"ucirc", "251"}, // � - lowercase u, circumflex accent
+            {"uuml", "252"}, // � - lowercase u, umlaut
+            {"yacute", "253"}, // � - lowercase y, acute accent
+            {"thorn", "254"}, // � - lowercase thorn, Icelandic
+            {"yuml", "255"}, // � - lowercase y, umlaut
     };
-
     // http://www.w3.org/TR/REC-html40/sgml/entities.html
     // package scoped for testing
     static final String[][] HTML40_ARRAY = {
@@ -358,27 +366,13 @@ class Entities {
             // <!-- rsaquo is proposed but not yet ISO standardized -->
             {"euro", "8364"}, // -- euro sign, U+20AC NEW -->
     };
-
-    /**
-     * <p>
-     * The set of entities supported by standard XML.
-     * </p>
-     */
-    public static final Entities XML;
-
-    /**
-     * <p>
-     * The set of entities supported by HTML 3.2.
-     * </p>
-     */
-    public static final Entities HTML32;
-
-    /**
-     * <p>
-     * The set of entities supported by HTML 4.0.
-     * </p>
-     */
-    public static final Entities HTML40;
+    private static final String[][] BASIC_ARRAY = {{"quot", "34"}, // " - double-quote
+            {"amp", "38"}, // & - ampersand
+            {"lt", "60"}, // < - less-than
+            {"gt", "62"}, // > - greater-than
+    };
+    private static final String[][] APOS_ARRAY = {{"apos", "39"}, // XML apostrophe
+    };
 
     static {
         XML = new Entities();
@@ -397,6 +391,9 @@ class Entities {
         fillWithHtml40Entities(HTML40);
     }
 
+    // package scoped for testing
+    EntityMap map = new Entities.LookupEntityMap();
+
     /**
      * <p>
      * Fills the specified entities instance with HTML 40 entities.
@@ -408,6 +405,252 @@ class Entities {
         entities.addEntities(BASIC_ARRAY);
         entities.addEntities(ISO8859_1_ARRAY);
         entities.addEntities(HTML40_ARRAY);
+    }
+
+    /**
+     * <p>
+     * Adds entities to this entity.
+     * </p>
+     *
+     * @param entityArray array of entities to be added
+     */
+    public void addEntities(String[][] entityArray) {
+        for (int i = 0; i < entityArray.length; ++i) {
+            addEntity(entityArray[i][0], Integer.parseInt(entityArray[i][1]));
+        }
+    }
+
+    /**
+     * <p>
+     * Add an entity to this entity.
+     * </p>
+     *
+     * @param name  name of the entity
+     * @param value vale of the entity
+     */
+    public void addEntity(String name, int value) {
+        map.add(name, value);
+    }
+
+    /**
+     * <p>
+     * Returns the name of the entity identified by the specified value.
+     * </p>
+     *
+     * @param value the value to locate
+     * @return entity name associated with the specified value
+     */
+    public String entityName(int value) {
+        return map.name(value);
+    }
+
+    /**
+     * <p>
+     * Returns the value of the entity identified by the specified name.
+     * </p>
+     *
+     * @param name the name to locate
+     * @return entity value associated with the specified name
+     */
+    public int entityValue(String name) {
+        return map.value(name);
+    }
+
+    /**
+     * <p>
+     * Escapes the characters in a <code>String</code>.
+     * </p>
+     * <p/>
+     * <p>
+     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), escape(&quot;\u00A1&quot;) will return
+     * &quot;&amp;foo;&quot;
+     * </p>
+     *
+     * @param str The <code>String</code> to escape.
+     * @return A new escaped <code>String</code>.
+     */
+    public String escape(String str) {
+        StringWriter stringWriter = createStringWriter(str);
+        try {
+            this.escape(stringWriter, str);
+        } catch (IOException e) {
+            // This should never happen because ALL the StringWriter methods called by #escape(Writer, String) do not
+            // throw IOExceptions.
+            throw new RuntimeException(e);
+        }
+        return stringWriter.toString();
+    }
+
+    /**
+     * <p>
+     * Escapes the characters in the <code>String</code> passed and writes the result to the <code>Writer</code>
+     * passed.
+     * </p>
+     *
+     * @param writer The <code>Writer</code> to write the results of the escaping to. Assumed to be a non-null value.
+     * @param str    The <code>String</code> to escape. Assumed to be a non-null value.
+     * @throws IOException when <code>Writer</code> passed throws the exception from calls to the {@link java.io.Writer#write(int)}
+     *                     methods.
+     * @see #escape(String)
+     * @see java.io.Writer
+     */
+    public void escape(Writer writer, String str)
+            throws IOException {
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            char c = str.charAt(i);
+            String entityName = this.entityName(c);
+            if (entityName == null) {
+                if (c > 0x7F) {
+                    writer.write("&#");
+                    writer.write(Integer.toString(c, 10));
+                    writer.write(';');
+                } else {
+                    writer.write(c);
+                }
+            } else {
+                writer.write('&');
+                writer.write(entityName);
+                writer.write(';');
+            }
+        }
+    }
+
+    /**
+     * <p>
+     * Unescapes the entities in a <code>String</code>.
+     * </p>
+     * <p/>
+     * <p>
+     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), unescape(&quot;&amp;foo;&quot;) will return
+     * &quot;\u00A1&quot;
+     * </p>
+     *
+     * @param str The <code>String</code> to escape.
+     * @return A new escaped <code>String</code>.
+     */
+    public String unescape(String str) {
+        int firstAmp = str.indexOf('&');
+        if (firstAmp < 0) {
+            return str;
+        } else {
+            StringWriter stringWriter = createStringWriter(str);
+            try {
+                this.doUnescape(stringWriter, str, firstAmp);
+            } catch (IOException e) {
+                // This should never happen because ALL the StringWriter methods called by #escape(Writer, String)
+                // do not throw IOExceptions.
+                throw new RuntimeException(e);
+            }
+            return stringWriter.toString();
+        }
+    }
+
+    /**
+     * Make the StringWriter 10% larger than the source String to avoid growing the writer
+     *
+     * @param str The source string
+     * @return A newly created StringWriter
+     */
+    private StringWriter createStringWriter(String str) {
+        return new StringWriter((int) (str.length() + (str.length() * 0.1)));
+    }
+
+    /**
+     * <p>
+     * Unescapes the escaped entities in the <code>String</code> passed and writes the result to the
+     * <code>Writer</code> passed.
+     * </p>
+     *
+     * @param writer The <code>Writer</code> to write the results to; assumed to be non-null.
+     * @param str    The source <code>String</code> to unescape; assumed to be non-null.
+     * @throws IOException when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
+     *                     methods.
+     * @see #escape(String)
+     * @see Writer
+     */
+    public void unescape(Writer writer, String str)
+            throws IOException {
+        int firstAmp = str.indexOf('&');
+        if (firstAmp < 0) {
+            writer.write(str);
+            return;
+        } else {
+            doUnescape(writer, str, firstAmp);
+        }
+    }
+
+    /**
+     * Underlying unescape method that allows the optimisation of not starting from the 0 index again.
+     *
+     * @param writer   The <code>Writer</code> to write the results to; assumed to be non-null.
+     * @param str      The source <code>String</code> to unescape; assumed to be non-null.
+     * @param firstAmp The <code>int</code> index of the first ampersand in the source String.
+     * @throws IOException when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
+     *                     methods.
+     */
+    private void doUnescape(Writer writer, String str, int firstAmp)
+            throws IOException {
+        writer.write(str, 0, firstAmp);
+        int len = str.length();
+        for (int i = firstAmp; i < len; i++) {
+            char c = str.charAt(i);
+            if (c == '&') {
+                int nextIdx = i + 1;
+                int semiColonIdx = str.indexOf(';', nextIdx);
+                if (semiColonIdx == -1) {
+                    writer.write(c);
+                    continue;
+                }
+                int amphersandIdx = str.indexOf('&', i + 1);
+                if (amphersandIdx != -1 && amphersandIdx < semiColonIdx) {
+                    // Then the text looks like &...&...;
+                    writer.write(c);
+                    continue;
+                }
+                String entityContent = str.substring(nextIdx, semiColonIdx);
+                int entityValue = -1;
+                int entityContentLen = entityContent.length();
+                if (entityContentLen > 0) {
+                    if (entityContent.charAt(0) == '#') { // escaped value content is an integer (decimal or
+                        // hexidecimal)
+                        if (entityContentLen > 1) {
+                            char isHexChar = entityContent.charAt(1);
+                            try {
+                                switch (isHexChar) {
+                                    case 'X':
+                                    case 'x': {
+                                        entityValue = Integer.parseInt(entityContent.substring(2), 16);
+                                        break;
+                                    }
+                                    default: {
+                                        entityValue = Integer.parseInt(entityContent.substring(1), 10);
+                                    }
+                                }
+                                if (entityValue > 0xFFFF) {
+                                    entityValue = -1;
+                                }
+                            } catch (NumberFormatException e) {
+                                entityValue = -1;
+                            }
+                        }
+                    } else { // escaped value content is an entity name
+                        entityValue = this.entityValue(entityContent);
+                    }
+                }
+
+                if (entityValue == -1) {
+                    writer.write('&');
+                    writer.write(entityContent);
+                    writer.write(';');
+                } else {
+                    writer.write(entityValue);
+                }
+                i = semiColonIdx; // move index up to the semi-colon
+            } else {
+                writer.write(c);
+            }
+        }
     }
 
     static interface EntityMap {
@@ -427,7 +670,6 @@ class Entities {
          * </p>
          *
          * @param value the value to locate
-         *
          * @return entity name associated with the specified value
          */
         String name(int value);
@@ -438,7 +680,6 @@ class Entities {
          * </p>
          *
          * @param name the name to locate
-         *
          * @return entity value associated with the specified name
          */
         int value(String name);
@@ -452,7 +693,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public void add(String name, int value) {
             mapNameToValue.put(name, new Integer(value));
             mapValueToName.put(value, name);
@@ -461,7 +702,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public String name(int value) {
             return (String) mapValueToName.get(value);
         }
@@ -469,7 +710,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public int value(String name) {
             Object value = mapNameToValue.get(name);
             if (value == null) {
@@ -487,7 +728,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public void add(String name, int value) {
             mapNameToValue.put(name, new Integer(value));
             mapValueToName.put(new Integer(value), name);
@@ -496,7 +737,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public String name(int value) {
             return (String) mapValueToName.get(new Integer(value));
         }
@@ -504,7 +745,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public int value(String name) {
             Object value = mapNameToValue.get(name);
             if (value == null) {
@@ -542,7 +783,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public String name(int value) {
             if (value < LOOKUP_TABLE_SIZE) {
                 return lookupTable()[value];
@@ -609,7 +850,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public void add(String name, int value) {
             ensureCapacity(size + 1);
             names[size] = name;
@@ -637,7 +878,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public String name(int value) {
             for (int i = 0; i < size; ++i) {
                 if (values[i] == value) {
@@ -650,7 +891,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public int value(String name) {
             for (int i = 0; i < size; ++i) {
                 if (names[i].equals(name)) {
@@ -685,7 +926,6 @@ class Entities {
          * {@link java.util.Arrays}.
          *
          * @param key the key to be found
-         *
          * @return the index of the entity array matching the specified key
          */
         private int binarySearch(int key) {
@@ -710,7 +950,7 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public void add(String name, int value) {
             ensureCapacity(size + 1);
             int insertAt = binarySearch(value);
@@ -728,267 +968,13 @@ class Entities {
         /**
          * {@inheritDoc}
          */
-		@Override
+        @Override
         public String name(int value) {
             int index = binarySearch(value);
             if (index < 0) {
                 return null;
             }
             return names[index];
-        }
-    }
-
-    // package scoped for testing
-    EntityMap map = new Entities.LookupEntityMap();
-
-    /**
-     * <p>
-     * Adds entities to this entity.
-     * </p>
-     *
-     * @param entityArray array of entities to be added
-     */
-    public void addEntities(String[][] entityArray) {
-        for (int i = 0; i < entityArray.length; ++i) {
-            addEntity(entityArray[i][0], Integer.parseInt(entityArray[i][1]));
-        }
-    }
-
-    /**
-     * <p>
-     * Add an entity to this entity.
-     * </p>
-     *
-     * @param name  name of the entity
-     * @param value vale of the entity
-     */
-    public void addEntity(String name, int value) {
-        map.add(name, value);
-    }
-
-    /**
-     * <p>
-     * Returns the name of the entity identified by the specified value.
-     * </p>
-     *
-     * @param value the value to locate
-     *
-     * @return entity name associated with the specified value
-     */
-    public String entityName(int value) {
-        return map.name(value);
-    }
-
-    /**
-     * <p>
-     * Returns the value of the entity identified by the specified name.
-     * </p>
-     *
-     * @param name the name to locate
-     *
-     * @return entity value associated with the specified name
-     */
-    public int entityValue(String name) {
-        return map.value(name);
-    }
-
-    /**
-     * <p>
-     * Escapes the characters in a <code>String</code>.
-     * </p>
-     * <p/>
-     * <p>
-     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), escape(&quot;\u00A1&quot;) will return
-     * &quot;&amp;foo;&quot;
-     * </p>
-     *
-     * @param str The <code>String</code> to escape.
-     *
-     * @return A new escaped <code>String</code>.
-     */
-    public String escape(String str) {
-        StringWriter stringWriter = createStringWriter(str);
-        try {
-            this.escape(stringWriter, str);
-        } catch (IOException e) {
-            // This should never happen because ALL the StringWriter methods called by #escape(Writer, String) do not
-            // throw IOExceptions.
-            throw new RuntimeException(e);
-        }
-        return stringWriter.toString();
-    }
-
-    /**
-     * <p>
-     * Escapes the characters in the <code>String</code> passed and writes the result to the <code>Writer</code>
-     * passed.
-     * </p>
-     *
-     * @param writer The <code>Writer</code> to write the results of the escaping to. Assumed to be a non-null value.
-     * @param str    The <code>String</code> to escape. Assumed to be a non-null value.
-     *
-     * @throws IOException when <code>Writer</code> passed throws the exception from calls to the {@link java.io.Writer#write(int)}
-     *                     methods.
-     * @see #escape(String)
-     * @see java.io.Writer
-     */
-    public void escape(Writer writer, String str) throws IOException {
-        int len = str.length();
-        for (int i = 0; i < len; i++) {
-            char c = str.charAt(i);
-            String entityName = this.entityName(c);
-            if (entityName == null) {
-                if (c > 0x7F) {
-                    writer.write("&#");
-                    writer.write(Integer.toString(c, 10));
-                    writer.write(';');
-                } else {
-                    writer.write(c);
-                }
-            } else {
-                writer.write('&');
-                writer.write(entityName);
-                writer.write(';');
-            }
-        }
-    }
-
-    /**
-     * <p>
-     * Unescapes the entities in a <code>String</code>.
-     * </p>
-     * <p/>
-     * <p>
-     * For example, if you have called addEntity(&quot;foo&quot;, 0xA1), unescape(&quot;&amp;foo;&quot;) will return
-     * &quot;\u00A1&quot;
-     * </p>
-     *
-     * @param str The <code>String</code> to escape.
-     *
-     * @return A new escaped <code>String</code>.
-     */
-    public String unescape(String str) {
-        int firstAmp = str.indexOf('&');
-        if (firstAmp < 0) {
-            return str;
-        } else {
-            StringWriter stringWriter = createStringWriter(str);
-            try {
-                this.doUnescape(stringWriter, str, firstAmp);
-            } catch (IOException e) {
-                // This should never happen because ALL the StringWriter methods called by #escape(Writer, String)
-                // do not throw IOExceptions.
-                throw new RuntimeException(e);
-            }
-            return stringWriter.toString();
-        }
-    }
-
-    /**
-     * Make the StringWriter 10% larger than the source String to avoid growing the writer
-     *
-     * @param str The source string
-     *
-     * @return A newly created StringWriter
-     */
-    private StringWriter createStringWriter(String str) {
-        return new StringWriter((int) (str.length() + (str.length() * 0.1)));
-    }
-
-    /**
-     * <p>
-     * Unescapes the escaped entities in the <code>String</code> passed and writes the result to the
-     * <code>Writer</code> passed.
-     * </p>
-     *
-     * @param writer The <code>Writer</code> to write the results to; assumed to be non-null.
-     * @param str    The source <code>String</code> to unescape; assumed to be non-null.
-     *
-     * @throws IOException when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
-     *                     methods.
-     * @see #escape(String)
-     * @see Writer
-     */
-    public void unescape(Writer writer, String str) throws IOException {
-        int firstAmp = str.indexOf('&');
-        if (firstAmp < 0) {
-            writer.write(str);
-            return;
-        } else {
-            doUnescape(writer, str, firstAmp);
-        }
-    }
-
-    /**
-     * Underlying unescape method that allows the optimisation of not starting from the 0 index again.
-     *
-     * @param writer   The <code>Writer</code> to write the results to; assumed to be non-null.
-     * @param str      The source <code>String</code> to unescape; assumed to be non-null.
-     * @param firstAmp The <code>int</code> index of the first ampersand in the source String.
-     *
-     * @throws IOException when <code>Writer</code> passed throws the exception from calls to the {@link Writer#write(int)}
-     *                     methods.
-     */
-    private void doUnescape(Writer writer, String str, int firstAmp) throws IOException {
-        writer.write(str, 0, firstAmp);
-        int len = str.length();
-        for (int i = firstAmp; i < len; i++) {
-            char c = str.charAt(i);
-            if (c == '&') {
-                int nextIdx = i + 1;
-                int semiColonIdx = str.indexOf(';', nextIdx);
-                if (semiColonIdx == -1) {
-                    writer.write(c);
-                    continue;
-                }
-                int amphersandIdx = str.indexOf('&', i + 1);
-                if (amphersandIdx != -1 && amphersandIdx < semiColonIdx) {
-                    // Then the text looks like &...&...;
-                    writer.write(c);
-                    continue;
-                }
-                String entityContent = str.substring(nextIdx, semiColonIdx);
-                int entityValue = -1;
-                int entityContentLen = entityContent.length();
-                if (entityContentLen > 0) {
-                    if (entityContent.charAt(0) == '#') { // escaped value content is an integer (decimal or
-                        // hexidecimal)
-                        if (entityContentLen > 1) {
-                            char isHexChar = entityContent.charAt(1);
-                            try {
-                                switch (isHexChar) {
-                                    case 'X':
-                                    case 'x': {
-                                        entityValue = Integer.parseInt(entityContent.substring(2), 16);
-                                        break;
-                                    }
-                                    default: {
-                                        entityValue = Integer.parseInt(entityContent.substring(1), 10);
-                                    }
-                                }
-                                if (entityValue > 0xFFFF) {
-                                    entityValue = -1;
-                                }
-                            } catch (NumberFormatException e) {
-                                entityValue = -1;
-                            }
-                        }
-                    } else { // escaped value content is an entity name
-                        entityValue = this.entityValue(entityContent);
-                    }
-                }
-
-                if (entityValue == -1) {
-                    writer.write('&');
-                    writer.write(entityContent);
-                    writer.write(';');
-                } else {
-                    writer.write(entityValue);
-                }
-                i = semiColonIdx; // move index up to the semi-colon
-            } else {
-                writer.write(c);
-            }
         }
     }
 

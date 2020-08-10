@@ -7,7 +7,6 @@ import osmedile.intellij.stringmanip.AbstractStringManipAction;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,11 +15,11 @@ import java.util.Map;
  */
 public class EncodeMd5Hex16Action extends AbstractStringManipAction<Object> {
 
-	@Override
-	protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, Object additionalParam) {
-		try {
+    @Override
+    protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, Object additionalParam) {
+        try {
 
-			byte[] hash = MessageDigest.getInstance("md5").digest(selectedText.getBytes("UTF-8"));
+            byte[] hash = MessageDigest.getInstance("md5").digest(selectedText.getBytes("UTF-8"));
 
 
             StringBuffer hashString = new StringBuffer();
@@ -43,10 +42,10 @@ public class EncodeMd5Hex16Action extends AbstractStringManipAction<Object> {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-	}
+    }
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        throw new UnsupportedOperationException();
+    }
 }

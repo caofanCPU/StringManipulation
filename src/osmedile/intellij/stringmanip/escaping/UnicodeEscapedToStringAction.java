@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class UnicodeEscapedToStringAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		return StringUtil.escapedUnicodeToString(s);
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        return StringUtil.escapedUnicodeToString(s);
     }
 }

@@ -7,36 +7,36 @@ import osmedile.intellij.stringmanip.Donate;
 import javax.swing.*;
 
 public class CaseSwitchingSettingsForm {
-	private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(CaseSwitchingSettingsForm.class);
+    private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(CaseSwitchingSettingsForm.class);
 
-	private JCheckBox separatorBefore;
-	private JCheckBox separatorAfter;
-	private JPanel root;
-	private JPanel donatePanel;
+    private JCheckBox separatorBefore;
+    private JCheckBox separatorAfter;
+    private JPanel root;
+    private JPanel donatePanel;
 
-	public CaseSwitchingSettingsForm() {
-		donatePanel.add(Donate.newDonateButton(donatePanel));
-	}
+    public CaseSwitchingSettingsForm() {
+        donatePanel.add(Donate.newDonateButton(donatePanel));
+    }
 
-	public void setData(CaseSwitchingSettings data) {
-		separatorBefore.setSelected(data.isSeparatorBeforeDigit());
-		separatorAfter.setSelected(data.isSeparatorAfterDigit());
-	}
+    public void setData(CaseSwitchingSettings data) {
+        separatorBefore.setSelected(data.isSeparatorBeforeDigit());
+        separatorAfter.setSelected(data.isSeparatorAfterDigit());
+    }
 
-	public void getData(CaseSwitchingSettings data) {
+    public void getData(CaseSwitchingSettings data) {
 
-		data.setSeparatorBeforeDigit(separatorBefore.isSelected());
-		data.setSeparatorAfterDigit(separatorAfter.isSelected());
-	}
+        data.setSeparatorBeforeDigit(separatorBefore.isSelected());
+        data.setSeparatorAfterDigit(separatorAfter.isSelected());
+    }
 
-	public boolean isModified(CaseSwitchingSettings data) {
-		if (separatorBefore.isSelected() != data.isSeparatorBeforeDigit()) return true;
-		if (separatorAfter.isSelected() != data.isSeparatorAfterDigit()) return true;
-		return false;
-	}
+    public boolean isModified(CaseSwitchingSettings data) {
+        if (separatorBefore.isSelected() != data.isSeparatorBeforeDigit()) return true;
+        if (separatorAfter.isSelected() != data.isSeparatorAfterDigit()) return true;
+        return false;
+    }
 
-	public JPanel getRoot() {
-		return root;
-	}
+    public JPanel getRoot() {
+        return root;
+    }
 
 }

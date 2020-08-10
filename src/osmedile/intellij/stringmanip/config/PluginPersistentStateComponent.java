@@ -16,8 +16,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import osmedile.intellij.stringmanip.CaseSwitchingSettings;
 import osmedile.intellij.stringmanip.align.ColumnAlignerModel;
-import osmedile.intellij.stringmanip.sort.tokens.SortTokensModel;
 import osmedile.intellij.stringmanip.sort.support.SortSettings;
+import osmedile.intellij.stringmanip.sort.tokens.SortTokensModel;
 import osmedile.intellij.stringmanip.styles.Style;
 import osmedile.intellij.stringmanip.styles.custom.CustomActionModel;
 import osmedile.intellij.stringmanip.styles.custom.DefaultActions;
@@ -27,237 +27,234 @@ import java.util.*;
 
 @State(name = "StringManipulationState", storages = {@Storage("stringManipulation.xml")})
 public class PluginPersistentStateComponent implements PersistentStateComponent<PluginPersistentStateComponent> {
-	private static final Logger LOG = Logger.getInstance(PluginPersistentStateComponent.class);
+    public static final int LIMIT = 20;
+    private static final Logger LOG = Logger.getInstance(PluginPersistentStateComponent.class);
+    private static PluginPersistentStateComponent unitTestComponent;
+    private List<ColumnAlignerModel> columnAlignerHistory = new ArrayList<ColumnAlignerModel>();
+    private List<CustomActionModel> customActionModels = DefaultActions.defaultActions();
+    private int lastSelectedAction = 0;
+    private int version = 0;
+    private SortSettings sortSettings = new SortSettings();
+    private CaseSwitchingSettings caseSwitchingSettings = new CaseSwitchingSettings();
+    private SortTokensModel sortTokensModel;
 
-	public static final int LIMIT = 20;
-	private List<ColumnAlignerModel> columnAlignerHistory = new ArrayList<ColumnAlignerModel>();
-	private List<CustomActionModel> customActionModels = DefaultActions.defaultActions();
+    public PluginPersistentStateComponent() {
+    }
 
-	private int lastSelectedAction = 0;
-	private int version = 0;
-	private SortSettings sortSettings = new SortSettings();
-	private CaseSwitchingSettings caseSwitchingSettings = new CaseSwitchingSettings();
-	private SortTokensModel sortTokensModel;
+    public static PluginPersistentStateComponent getInstance() {
+        if (ApplicationManager.getApplication() == null) {
+            if (unitTestComponent == null) {
+                unitTestComponent = new PluginPersistentStateComponent();
+            }
+            return unitTestComponent;
+        }
+        return ServiceManager.getService(PluginPersistentStateComponent.class);
+    }
 
-	public PluginPersistentStateComponent() {
-	}
+    public int getLastSelectedAction() {
+        return lastSelectedAction;
+    }
 
-	public int getLastSelectedAction() {
-		return lastSelectedAction;
-	}
+    public void setLastSelectedAction(int lastSelectedAction) {
+        this.lastSelectedAction = lastSelectedAction;
+    }
 
-	public void setLastSelectedAction(int lastSelectedAction) {
-		this.lastSelectedAction = lastSelectedAction;
-	}
+    public List<CustomActionModel> getCustomActionModels() {
+        return customActionModels;
+    }
 
-	public List<CustomActionModel> getCustomActionModels() {
-		return customActionModels;
-	}
+    public void setCustomActionModels(List<CustomActionModel> customActionModels) {
+        this.customActionModels = customActionModels;
+    }
 
-	public void setCustomActionModels(List<CustomActionModel> customActionModels) {
-		this.customActionModels = customActionModels;
-	}
+    public CaseSwitchingSettings getCaseSwitchingSettings() {
+        return caseSwitchingSettings;
+    }
 
-	public CaseSwitchingSettings getCaseSwitchingSettings() {
-		return caseSwitchingSettings;
-	}
+    public void setCaseSwitchingSettings(CaseSwitchingSettings caseSwitchingSettings) {
+        this.caseSwitchingSettings = caseSwitchingSettings;
+    }
 
-	public void setCaseSwitchingSettings(CaseSwitchingSettings caseSwitchingSettings) {
-		this.caseSwitchingSettings = caseSwitchingSettings;
-	}
+    public SortSettings getSortSettings() {
+        return sortSettings;
+    }
 
-	public SortSettings getSortSettings() {
-		return sortSettings;
-	}
+    public void setSortSettings(SortSettings sortSettings) {
+        this.sortSettings = sortSettings;
+    }
 
-	public void setSortSettings(SortSettings sortSettings) {
-		this.sortSettings = sortSettings;
-	}
+    public List<ColumnAlignerModel> getColumnAlignerHistory() {
+        return columnAlignerHistory;
+    }
 
-	public List<ColumnAlignerModel> getColumnAlignerHistory() {
-		return columnAlignerHistory;
-	}
+    public void setColumnAlignerHistory(List<ColumnAlignerModel> columnAlignerHistory) {
+        this.columnAlignerHistory = columnAlignerHistory;
+    }
 
-	public void setColumnAlignerHistory(List<ColumnAlignerModel> columnAlignerHistory) {
-		this.columnAlignerHistory = columnAlignerHistory;
-	}
+    public int getVersion() {
+        return version;
+    }
 
-	public int getVersion() {
-		return version;
-	}
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
-	@NotNull
-	@Transient
-	public ColumnAlignerModel guessModel(Editor editor) {
-		String s = getTextForPreview(editor);
-		if (columnAlignerHistory.size() > 0) {
-			for (int i = columnAlignerHistory.size() - 1; i >= 0; i--) {
-				ColumnAlignerModel columnAlignerModel = columnAlignerHistory.get(i);
-				List<String> separators = columnAlignerModel.getSeparators();
-				for (String separator : separators) {
-					if (s.contains(separator)) {
-						return columnAlignerModel;
-					}
-				}
-			}
-		}
+    @NotNull
+    @Transient
+    public ColumnAlignerModel guessModel(Editor editor) {
+        String s = getTextForPreview(editor);
+        if (columnAlignerHistory.size() > 0) {
+            for (int i = columnAlignerHistory.size() - 1; i >= 0; i--) {
+                ColumnAlignerModel columnAlignerModel = columnAlignerHistory.get(i);
+                List<String> separators = columnAlignerModel.getSeparators();
+                for (String separator : separators) {
+                    if (s.contains(separator)) {
+                        return columnAlignerModel;
+                    }
+                }
+            }
+        }
 
 
-		ColumnAlignerModel columnAlignerModel = new ColumnAlignerModel();
-		List<String> separators = columnAlignerModel.getSeparators();
-		//TODO configurable?
-		addSeparator(s, "|", false, separators);
-		addSeparator(s, ";", false, separators);
-		addSeparator(s, "->", false, separators);
-		addSeparator(s, "<-", false, separators);
-		addSeparator(s, "-", true, separators);
-		addSeparator(s, ":", true, separators);
-		addSeparator(s, ",", true, separators);
-		addSeparator(s, " ", true, separators);
-		return columnAlignerModel;
-	}
+        ColumnAlignerModel columnAlignerModel = new ColumnAlignerModel();
+        List<String> separators = columnAlignerModel.getSeparators();
+        //TODO configurable?
+        addSeparator(s, "|", false, separators);
+        addSeparator(s, ";", false, separators);
+        addSeparator(s, "->", false, separators);
+        addSeparator(s, "<-", false, separators);
+        addSeparator(s, "-", true, separators);
+        addSeparator(s, ":", true, separators);
+        addSeparator(s, ",", true, separators);
+        addSeparator(s, " ", true, separators);
+        return columnAlignerModel;
+    }
 
-	@NotNull
-	protected String getTextForPreview(Editor editor) {
-		List<CaretState> caretsAndSelections = editor.getCaretModel().getCaretsAndSelections();
-		IdeUtils.sort(caretsAndSelections);
-		StringBuilder sb = new StringBuilder();
-		for (CaretState caretsAndSelection : caretsAndSelections) {
-			LogicalPosition selectionStart = caretsAndSelection.getSelectionStart();
-			LogicalPosition selectionEnd = caretsAndSelection.getSelectionEnd();
-			String text = editor.getDocument().getText(
-					new TextRange(editor.logicalPositionToOffset(selectionStart),
-							editor.logicalPositionToOffset(selectionEnd)));
+    @NotNull
+    protected String getTextForPreview(Editor editor) {
+        List<CaretState> caretsAndSelections = editor.getCaretModel().getCaretsAndSelections();
+        IdeUtils.sort(caretsAndSelections);
+        StringBuilder sb = new StringBuilder();
+        for (CaretState caretsAndSelection : caretsAndSelections) {
+            LogicalPosition selectionStart = caretsAndSelection.getSelectionStart();
+            LogicalPosition selectionEnd = caretsAndSelection.getSelectionEnd();
+            String text = editor.getDocument().getText(
+                    new TextRange(editor.logicalPositionToOffset(selectionStart),
+                            editor.logicalPositionToOffset(selectionEnd)));
 
-			sb.append(text);
-			if (sb.length() > 10000) {
-				break;
-			}
-		}
-		String s = sb.toString();
-		s = s.substring(0, Math.min(10000, s.length()));
-		return s;
-	}
+            sb.append(text);
+            if (sb.length() > 10000) {
+                break;
+            }
+        }
+        String s = sb.toString();
+        s = s.substring(0, Math.min(10000, s.length()));
+        return s;
+    }
 
-	@Transient
-	public void addToHistory(ColumnAlignerModel columnAlignerModel) {
-		List<ColumnAlignerModel> newList = new ArrayList<ColumnAlignerModel>(columnAlignerHistory.size() + 1);
+    @Transient
+    public void addToHistory(ColumnAlignerModel columnAlignerModel) {
+        List<ColumnAlignerModel> newList = new ArrayList<ColumnAlignerModel>(columnAlignerHistory.size() + 1);
 
-		int startIndex = columnAlignerHistory.size() >= LIMIT ? 1 : 0;
-		for (int i = startIndex; i < columnAlignerHistory.size(); i++) {
-			ColumnAlignerModel alignerModel = columnAlignerHistory.get(i);
-			if (!alignerModel.equals(columnAlignerModel)) {
-				newList.add(alignerModel);
-			}
-		}
+        int startIndex = columnAlignerHistory.size() >= LIMIT ? 1 : 0;
+        for (int i = startIndex; i < columnAlignerHistory.size(); i++) {
+            ColumnAlignerModel alignerModel = columnAlignerHistory.get(i);
+            if (!alignerModel.equals(columnAlignerModel)) {
+                newList.add(alignerModel);
+            }
+        }
 
-		columnAlignerModel.setAdded(new Date());
-		newList.add(columnAlignerModel);
+        columnAlignerModel.setAdded(new Date());
+        newList.add(columnAlignerModel);
 
-		columnAlignerHistory = newList;
-	}
+        columnAlignerHistory = newList;
+    }
 
-	private static PluginPersistentStateComponent unitTestComponent;
+    @Nullable
+    @Override
+    public PluginPersistentStateComponent getState() {
+        return this;
+    }
 
-	public static PluginPersistentStateComponent getInstance() {
-		if (ApplicationManager.getApplication() == null) {
-			if (unitTestComponent == null) {
-				unitTestComponent = new PluginPersistentStateComponent();
-			}
-			return unitTestComponent;
-		}
-		return ServiceManager.getService(PluginPersistentStateComponent.class);
-	}
+    @Override
+    public void loadState(PluginPersistentStateComponent o) {
+        XmlSerializerUtil.copyBean(o, this);
+        fixActions();
+    }
 
-	@Nullable
-	@Override
-	public PluginPersistentStateComponent getState() {
-		return this;
-	}
+    private void fixActions() {
+        for (CustomActionModel customActionModel : customActionModels) {
+            Set<Style> styles = new HashSet<>();
+            styles.addAll(Arrays.asList(Style.values()));
 
-	@Override
-	public void loadState(PluginPersistentStateComponent o) {
-		XmlSerializerUtil.copyBean(o, this);
-		fixActions();
-	}
+            List<CustomActionModel.Step> steps = customActionModel.getSteps();
+            for (CustomActionModel.Step step : steps) {
+                Style stepStyle = step.getStyleAsEnum();
+                styles.remove(stepStyle);
+            }
 
-	private void fixActions() {
-		for (CustomActionModel customActionModel : customActionModels) {
-			Set<Style> styles = new HashSet<>();
-			styles.addAll(Arrays.asList(Style.values()));
+            if (!styles.isEmpty()) {
+                Iterator<CustomActionModel.Step> stepIterator = steps.iterator();
+                while (stepIterator.hasNext()) {
+                    CustomActionModel.Step next = stepIterator.next();
+                    Style stepStyle = next.getStyleAsEnum();
+                    if (stepStyle == null) {
+                        stepIterator.remove();
+                    }
+                }
+                for (Style style : styles) {
+                    Boolean enabled = DefaultActions.DEFAULT_AS_MAP.get(style);
+                    if (enabled == null) {
+                        enabled = !style.name().startsWith("_");
+                    }
+                    steps.add(new CustomActionModel.Step(enabled, style));
+                }
+            }
+        }
+    }
 
-			List<CustomActionModel.Step> steps = customActionModel.getSteps();
-			for (CustomActionModel.Step step : steps) {
-				Style stepStyle = step.getStyleAsEnum();
-				styles.remove(stepStyle);
-			}
+    public void resetDefaultActions() {
+        boolean exists = false;
+        for (CustomActionModel customActionModel : customActionModels) {
+            if (DefaultActions.SWITCH_STYLE_ACTION.equals(customActionModel.getId())) {
+                exists = true;
+                DefaultActions.resetDefaultSwitchCase(customActionModel);
+            }
+        }
+        if (!exists) {
+            customActionModels.add(DefaultActions.defaultSwitchCase());
+        }
+    }
 
-			if (!styles.isEmpty()) {
-				Iterator<CustomActionModel.Step> stepIterator = steps.iterator();
-				while (stepIterator.hasNext()) {
-					CustomActionModel.Step next = stepIterator.next();
-					Style stepStyle = next.getStyleAsEnum();
-					if (stepStyle == null) {
-						stepIterator.remove();
-					}
-				}
-				for (Style style : styles) {
-					Boolean enabled = DefaultActions.DEFAULT_AS_MAP.get(style);
-					if (enabled == null) {
-						enabled = !style.name().startsWith("_");
-					}
-					steps.add(new CustomActionModel.Step(enabled, style));
-				}
-			}
-		}
-	}
+    public SortTokensModel guessSortTokensModel(Editor editor) {
+        String s = getTextForPreview(editor);
 
-	public void resetDefaultActions() {
-		boolean exists = false;
-		for (CustomActionModel customActionModel : customActionModels) {
-			if (DefaultActions.SWITCH_STYLE_ACTION.equals(customActionModel.getId())) {
-				exists = true;
-				DefaultActions.resetDefaultSwitchCase(customActionModel);
-			}
-		}
-		if (!exists) {
-			customActionModels.add(DefaultActions.defaultSwitchCase());
-		}
-	}
+        SortTokensModel model = sortTokensModel != null ? sortTokensModel : new SortTokensModel();
+        List<String> separators = model.getSeparators();
+        separators.removeIf(next -> next.length() == 0 || !s.contains(next));
 
-	public SortTokensModel guessSortTokensModel(Editor editor) {
-		String s = getTextForPreview(editor);
+        //TODO configurable?
+        addSeparator(s, "|", true, separators);
+        addSeparator(s, ",", true, separators);
+        addSeparator(s, "->", true, separators);
+        addSeparator(s, "<-", true, separators);
+        addSeparator(s, "-", true, separators);
+        addSeparator(s, ";", true, separators);
+        addSeparator(s, ":", true, separators);
+        addSeparator(s, " ", true, separators);
+        return model;
+    }
 
-		SortTokensModel model = sortTokensModel != null ? sortTokensModel : new SortTokensModel();
-		List<String> separators = model.getSeparators();
-		separators.removeIf(next -> next.length()==0 ||!s.contains(next));
+    private void addSeparator(String s, String separator, boolean skipIfNotEmpty, List<String> separators) {
+        if (!separators.isEmpty() && skipIfNotEmpty) {
+            return;
+        }
+        if (s.contains(separator)) {
+            separators.add(separator);
+        }
+    }
 
-		//TODO configurable?
-		addSeparator(s, "|", true, separators);
-		addSeparator(s, ",", true, separators);
-		addSeparator(s, "->", true, separators);
-		addSeparator(s, "<-", true, separators);
-		addSeparator(s, "-", true, separators);
-		addSeparator(s, ";", true, separators);
-		addSeparator(s, ":", true, separators);
-		addSeparator(s, " ", true, separators);
-		return model;
-	}
-
-	private void addSeparator(String s, String separator, boolean skipIfNotEmpty, List<String> separators) {
-		if (!separators.isEmpty() && skipIfNotEmpty) {
-			return;
-		}
-		if (s.contains(separator)) {
-			separators.add(separator);
-		}
-	}
-
-	public void storeModel(SortTokensModel settings) {
-		this.sortTokensModel = settings;
-	}
+    public void storeModel(SortTokensModel settings) {
+        this.sortTokensModel = settings;
+    }
 }

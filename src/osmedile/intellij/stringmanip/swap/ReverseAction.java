@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class ReverseAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String s, Object additionalParam) {
-		return StringUtils.reverse(s);
-	}
+    @Override
+    protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String s, Object additionalParam) {
+        return StringUtils.reverse(s);
+    }
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        throw new UnsupportedOperationException();
+    }
 
 }

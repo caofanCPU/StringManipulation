@@ -40,5 +40,5 @@ public class EncodingUtils {
             throw new RuntimeException(e);
         }
     }
-    
+
 }

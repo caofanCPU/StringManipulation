@@ -59,6 +59,7 @@ public class StringEscapeUtil {
 
     // Java and JavaScript
     //--------------------------------------------------------------------------
+
     /**
      * <p>Escapes the characters in a <code>String</code> using Java String rules.</p>
      * <p/>
@@ -78,7 +79,6 @@ public class StringEscapeUtil {
      * </p>
      *
      * @param str String to escape values in, may be null
-     *
      * @return String with escaped values, <code>null</code> if null string input
      */
     public static String escapeJava(String str) {
@@ -93,12 +93,12 @@ public class StringEscapeUtil {
      *
      * @param out Writer to write escaped string into
      * @param str String to escape values in, may be null
-     *
      * @throws IllegalArgumentException if the Writer is <code>null</code>
      * @throws java.io.IOException      if error occurs on underlying Writer
      * @see #escapeJava(java.lang.String)
      */
-    public static void escapeJava(Writer out, String str) throws IOException {
+    public static void escapeJava(Writer out, String str)
+            throws IOException {
         escapeJavaStyleString(out, str, false);
     }
 
@@ -121,7 +121,6 @@ public class StringEscapeUtil {
      * </p>
      *
      * @param str String to escape values in, may be null
-     *
      * @return String with escaped values, <code>null</code> if null string input
      */
     public static String escapeJavaScript(String str) {
@@ -136,12 +135,12 @@ public class StringEscapeUtil {
      *
      * @param out Writer to write escaped string into
      * @param str String to escape values in, may be null
-     *
      * @throws IllegalArgumentException if the Writer is <code>null</code>
      * @throws IOException              if error occurs on underlying Writer
      * @see #escapeJavaScript(java.lang.String)
      */
-    public static void escapeJavaScript(Writer out, String str) throws IOException {
+    public static void escapeJavaScript(Writer out, String str)
+            throws IOException {
         escapeJavaStyleString(out, str, true);
     }
 
@@ -150,7 +149,6 @@ public class StringEscapeUtil {
      *
      * @param str                String to escape values in, may be null
      * @param escapeSingleQuotes escapes single quotes if <code>true</code>
-     *
      * @return the escaped string
      */
     private static String escapeJavaStyleString(String str, boolean escapeSingleQuotes) {
@@ -174,7 +172,6 @@ public class StringEscapeUtil {
      * @param out               write to receieve the escaped string
      * @param str               String to escape values in, may be null
      * @param escapeSingleQuote escapes single quotes if <code>true</code>
-     *
      * @throws IOException if an IOException occurs
      */
     private static void escapeJavaStyleString(Writer out, String str, boolean escapeSingleQuote)
@@ -256,7 +253,6 @@ public class StringEscapeUtil {
      * character.</p>
      *
      * @param ch The character to convert.
-     *
      * @return An upper case hexadecimal <code>String</code>
      */
     private static String hex(char ch) {
@@ -270,7 +266,6 @@ public class StringEscapeUtil {
      * is preceded by another <code>'\'</code>.</p>
      *
      * @param str the <code>String</code> to unescape, may be null
-     *
      * @return a new unescaped <code>String</code>, <code>null</code> if null string input
      */
     public static String unescapeJava(String str) {
@@ -300,11 +295,11 @@ public class StringEscapeUtil {
      *
      * @param out the <code>Writer</code> used to output unescaped characters
      * @param str the <code>String</code> to unescape, may be null
-     *
      * @throws IllegalArgumentException if the Writer is <code>null</code>
      * @throws IOException              if error occurs on underlying Writer
      */
-    public static void unescapeJava(Writer out, String str) throws IOException {
+    public static void unescapeJava(Writer out, String str)
+            throws IOException {
         if (out == null) {
             throw new IllegalArgumentException("The Writer must not be null");
         }
@@ -392,9 +387,7 @@ public class StringEscapeUtil {
      * <code>'\'</code>.</p>
      *
      * @param str the <code>String</code> to unescape, may be null
-     *
      * @return A new unescaped <code>String</code>, <code>null</code> if null string input
-     *
      * @see #unescapeJava(String)
      */
     public static String unescapeJavaScript(String str) {
@@ -413,17 +406,18 @@ public class StringEscapeUtil {
      *
      * @param out the <code>Writer</code> used to output unescaped characters
      * @param str the <code>String</code> to unescape, may be null
-     *
      * @throws IllegalArgumentException if the Writer is <code>null</code>
      * @throws IOException              if error occurs on underlying Writer
-     * @see #unescapeJava(Writer,String)
+     * @see #unescapeJava(Writer, String)
      */
-    public static void unescapeJavaScript(Writer out, String str) throws IOException {
+    public static void unescapeJavaScript(Writer out, String str)
+            throws IOException {
         unescapeJava(out, str);
     }
 
     // HTML and XML
     //--------------------------------------------------------------------------
+
     /**
      * <p>Escapes the characters in a <code>String</code> using HTML entities.</p>
      * <p/>
@@ -441,9 +435,7 @@ public class StringEscapeUtil {
      * is not a legal entity and so is not supported). </p>
      *
      * @param str the <code>String</code> to escape, may be null
-     *
      * @return a new escaped <code>String</code>, <code>null</code> if null string input
-     *
      * @see #unescapeHtml(String)
      * @see <a href="http://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO Entities</a>
      * @see <a href="http://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character Entities for ISO Latin-1</a>
@@ -484,7 +476,6 @@ public class StringEscapeUtil {
      *
      * @param writer the writer receiving the escaped string, not null
      * @param string the <code>String</code> to escape, may be null
-     *
      * @throws IllegalArgumentException if the writer is null
      * @throws IOException              when <code>Writer</code> passed throws the exception from
      *                                  calls to the {@link Writer#write(int)} methods.
@@ -496,7 +487,8 @@ public class StringEscapeUtil {
      * @see <a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
      * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
      */
-    public static void escapeHtml(Writer writer, String string) throws IOException {
+    public static void escapeHtml(Writer writer, String string)
+            throws IOException {
         if (writer == null) {
             throw new IllegalArgumentException("The Writer must not be null.");
         }
@@ -507,6 +499,7 @@ public class StringEscapeUtil {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * <p>Unescapes a string containing entity escapes to a string
      * containing the actual Unicode characters corresponding to the
@@ -520,9 +513,7 @@ public class StringEscapeUtil {
      * become "&gt;&amp;zzzz;x".</p>
      *
      * @param str the <code>String</code> to unescape, may be null
-     *
      * @return a new unescaped <code>String</code>, <code>null</code> if null string input
-     *
      * @see #escapeHtml(Writer, String)
      */
     public static String unescapeHtml(String str) {
@@ -555,12 +546,12 @@ public class StringEscapeUtil {
      *
      * @param writer the writer receiving the unescaped string, not null
      * @param string the <code>String</code> to unescape, may be null
-     *
      * @throws IllegalArgumentException if the writer is null
      * @throws IOException              if an IOException occurs
      * @see #escapeHtml(String)
      */
-    public static void unescapeHtml(Writer writer, String string) throws IOException {
+    public static void unescapeHtml(Writer writer, String string)
+            throws IOException {
         if (writer == null) {
             throw new IllegalArgumentException("The Writer must not be null.");
         }
@@ -571,6 +562,7 @@ public class StringEscapeUtil {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * <p>Escapes the characters in a <code>String</code> using XML entities.</p>
      * <p/>
@@ -586,12 +578,12 @@ public class StringEscapeUtil {
      *
      * @param writer the writer receiving the unescaped string, not null
      * @param str    the <code>String</code> to escape, may be null
-     *
      * @throws IllegalArgumentException if the writer is null
      * @throws IOException              if there is a problem writing
      * @see #unescapeXml(java.lang.String)
      */
-    public static void escapeXml(Writer writer, String str) throws IOException {
+    public static void escapeXml(Writer writer, String str)
+            throws IOException {
         if (writer == null) {
             throw new IllegalArgumentException("The Writer must not be null.");
         }
@@ -615,9 +607,7 @@ public class StringEscapeUtil {
      * their numerical \\u equivalent. This may change in future releases. </p>
      *
      * @param str the <code>String</code> to escape, may be null
-     *
      * @return a new escaped <code>String</code>, <code>null</code> if null string input
-     *
      * @see #unescapeXml(java.lang.String)
      */
     public static String escapeXml(String str) {
@@ -628,6 +618,7 @@ public class StringEscapeUtil {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * <p>Unescapes a string containing XML entity escapes to a string
      * containing the actual Unicode characters corresponding to the
@@ -641,12 +632,12 @@ public class StringEscapeUtil {
      *
      * @param writer the writer receiving the unescaped string, not null
      * @param str    the <code>String</code> to unescape, may be null
-     *
      * @throws IllegalArgumentException if the writer is null
      * @throws IOException              if there is a problem writing
      * @see #escapeXml(String)
      */
-    public static void unescapeXml(Writer writer, String str) throws IOException {
+    public static void unescapeXml(Writer writer, String str)
+            throws IOException {
         if (writer == null) {
             throw new IllegalArgumentException("The Writer must not be null.");
         }
@@ -668,9 +659,7 @@ public class StringEscapeUtil {
      * unicode characters. This may change in future releases. </p>
      *
      * @param str the <code>String</code> to unescape, may be null
-     *
      * @return a new unescaped <code>String</code>, <code>null</code> if null string input
-     *
      * @see #escapeXml(String)
      */
     public static String unescapeXml(String str) {
@@ -681,6 +670,7 @@ public class StringEscapeUtil {
     }
 
     //-----------------------------------------------------------------------
+
     /**
      * <p>Escapes the characters in a <code>String</code> to be suitable to pass to
      * an SQL query.</p>
@@ -698,7 +688,6 @@ public class StringEscapeUtil {
      * see http://www.jguru.com/faq/view.jsp?EID=8881
      *
      * @param str the string to escape, may be null
-     *
      * @return a new String, escaped for SQL, <code>null</code> if null string input
      */
     public static String escapeSql(String str) {
@@ -708,17 +697,17 @@ public class StringEscapeUtil {
         return StringUtils.replace(str, "'", "''");
     }
 
-	public static String escapePHP(String s) {
-		if (s == null) {
-			return null;
-		}
-		return s.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"").replace("$", "\\$");
-	}
+    public static String escapePHP(String s) {
+        if (s == null) {
+            return null;
+        }
+        return s.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"").replace("$", "\\$");
+    }
 
-	public static String unescapePHP(String s) {
-		if (s == null) {
-			return null;
-		}
-		return s.replace("\\\\", "\\").replace("\\'", "'").replace("\\\"", "\"").replace("\\$", "$");
-	}
+    public static String unescapePHP(String s) {
+        if (s == null) {
+            return null;
+        }
+        return s.replace("\\\\", "\\").replace("\\'", "'").replace("\\\"", "\"").replace("\\$", "$");
+    }
 }

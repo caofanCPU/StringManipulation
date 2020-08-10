@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public class EscapeJavaScriptAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		return shaded.org.apache.commons.text.StringEscapeUtils.escapeEcmaScript(s);
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        return shaded.org.apache.commons.text.StringEscapeUtils.escapeEcmaScript(s);
     }
 }

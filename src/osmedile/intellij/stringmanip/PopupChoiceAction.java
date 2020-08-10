@@ -25,60 +25,60 @@ import java.awt.event.InputEvent;
 
 public class PopupChoiceAction extends EditorAction {
 
-	public PopupChoiceAction(EditorActionHandler defaultHandler) {
-		super(defaultHandler);
-	}
+    public PopupChoiceAction(EditorActionHandler defaultHandler) {
+        super(defaultHandler);
+    }
 
-	public PopupChoiceAction() {
-		super(new MyEditorWriteActionHandler(null) {
-			@NotNull
-			@Override
-			protected Pair beforeWriteAction(Editor editor, DataContext dataContext) {
-				WhatsNewPopup.whatsNewCheck(editor);
+    public PopupChoiceAction() {
+        super(new MyEditorWriteActionHandler(null) {
+            @NotNull
+            @Override
+            protected Pair beforeWriteAction(Editor editor, DataContext dataContext) {
+                WhatsNewPopup.whatsNewCheck(editor);
 
-				ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(null, (ActionGroup) CustomActionsSchema.getInstance().getCorrectedAction("StringManipulation.Group.Main"),
-					dataContext, JBPopupFactory.ActionSelectionAid.ALPHA_NUMBERING, true);
+                ListPopup popup = JBPopupFactory.getInstance().createActionGroupPopup(null, (ActionGroup) CustomActionsSchema.getInstance().getCorrectedAction("StringManipulation.Group.Main"),
+                        dataContext, JBPopupFactory.ActionSelectionAid.ALPHA_NUMBERING, true);
 
-				popup.showInBestPositionFor(dataContext);
-				return stopExecution();
-			}
+                popup.showInBestPositionFor(dataContext);
+                return stopExecution();
+            }
 
-			@Override
-			protected void executeWriteAction(Editor editor, @Nullable Caret caret, DataContext dataContext, @Nullable Object additionalParameter) {
+            @Override
+            protected void executeWriteAction(Editor editor, @Nullable Caret caret, DataContext dataContext, @Nullable Object additionalParameter) {
 
-			}
-		});
-	}
+            }
+        });
+    }
 
-	@Override
-	public void update(AnActionEvent e) {
-		super.update(e);
-		Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
-		if (editor == null) {
-			e.getPresentation().setEnabled(false);
-			return;
-		}
-		Project project = getEventProject(e);
-		if (project != null) {
-			InputEvent inputEvent = e.getInputEvent();
-			boolean onlyAltDown = false;
-			if (inputEvent != null) {
-				onlyAltDown = inputEvent.isAltDown() && !inputEvent.isShiftDown() && !inputEvent.isMetaDown() && !inputEvent.isControlDown();
-			}
-			LookupEx activeLookup = LookupManager.getInstance(project).getActiveLookup();
-			boolean dialogOpen = isFromDialog(project);
-			boolean popupCheck = activeLookup == null || (activeLookup != null && !onlyAltDown);
-			boolean dialogCheck = !dialogOpen || (dialogOpen && !onlyAltDown);
-			e.getPresentation().setEnabled((popupCheck && dialogCheck));
-		}
-	}
+    public static boolean isFromDialog(Project project) {
+        final Component owner = IdeFocusManager.getInstance(project).getFocusOwner();
+        if (owner != null) {
+            final DialogWrapper instance = DialogWrapper.findInstance(owner);
+            return instance != null;
+        }
+        return false;
+    }
 
-	public static boolean isFromDialog(Project project) {
-		final Component owner = IdeFocusManager.getInstance(project).getFocusOwner();
-		if (owner != null) {
-			final DialogWrapper instance = DialogWrapper.findInstance(owner);
-			return instance != null;
-		}
-		return false;
-	}
+    @Override
+    public void update(AnActionEvent e) {
+        super.update(e);
+        Editor editor = CommonDataKeys.EDITOR.getData(e.getDataContext());
+        if (editor == null) {
+            e.getPresentation().setEnabled(false);
+            return;
+        }
+        Project project = getEventProject(e);
+        if (project != null) {
+            InputEvent inputEvent = e.getInputEvent();
+            boolean onlyAltDown = false;
+            if (inputEvent != null) {
+                onlyAltDown = inputEvent.isAltDown() && !inputEvent.isShiftDown() && !inputEvent.isMetaDown() && !inputEvent.isControlDown();
+            }
+            LookupEx activeLookup = LookupManager.getInstance(project).getActiveLookup();
+            boolean dialogOpen = isFromDialog(project);
+            boolean popupCheck = activeLookup == null || (activeLookup != null && !onlyAltDown);
+            boolean dialogCheck = !dialogOpen || (dialogOpen && !onlyAltDown);
+            e.getPresentation().setEnabled((popupCheck && dialogCheck));
+        }
+    }
 }

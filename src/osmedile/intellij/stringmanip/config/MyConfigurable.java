@@ -11,71 +11,72 @@ import osmedile.intellij.stringmanip.ShortcutStartupActivity;
 import javax.swing.*;
 
 public class MyConfigurable implements SearchableConfigurable {
-	private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(MyConfigurable.class);
-	private SettingsForm gui;
-	private PluginPersistentStateComponent instance;
+    private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(MyConfigurable.class);
+    private SettingsForm gui;
+    private PluginPersistentStateComponent instance;
 
-	public MyConfigurable() {
-		instance = PluginPersistentStateComponent.getInstance();
-	}
+    public MyConfigurable() {
+        instance = PluginPersistentStateComponent.getInstance();
+    }
 
-	@Nullable
-	@Override
-	public JComponent createComponent() {
-		if (gui == null) {
-			gui = new SettingsForm();
-		}
-		return gui.getRoot();
-	}
+    @Nullable
+    @Override
+    public JComponent createComponent() {
+        if (gui == null) {
+            gui = new SettingsForm();
+        }
+        return gui.getRoot();
+    }
 
-	@Override
-	public void disposeUIResources() {
-		if (gui != null) {
-			gui.dispose();
-		}
-		gui = null;
-	}
+    @Override
+    public void disposeUIResources() {
+        if (gui != null) {
+            gui.dispose();
+        }
+        gui = null;
+    }
 
-	@Nls
-	@Override
-	public String getDisplayName() {
-		return "String Manipulation";
-	}
+    @Nls
+    @Override
+    public String getDisplayName() {
+        return "String Manipulation";
+    }
 
-	@Nullable
-	@Override
-	public String getHelpTopic() {
-		return null;
-	}
+    @Nullable
+    @Override
+    public String getHelpTopic() {
+        return null;
+    }
 
-	@NotNull
-	@Override
-	public String getId() {
-		return "StringManipulation";
-	}
+    @NotNull
+    @Override
+    public String getId() {
+        return "StringManipulation";
+    }
 
-	@Nullable
-	@Override
-	public Runnable enableSearch(String s) {
-		return null;
-	}
+    @Nullable
+    @Override
+    public Runnable enableSearch(String s) {
+        return null;
+    }
 
-	@Override
-	public boolean isModified() {
-		return gui != null && gui.isModified(instance);
-	}
+    @Override
+    public boolean isModified() {
+        return gui != null && gui.isModified(instance);
+    }
 
-	@Override
-	public void apply() throws ConfigurationException {
-		ShortcutStartupActivity.unRegisterActions(instance.getCustomActionModels());
+    @Override
+    public void apply()
+            throws ConfigurationException {
+        ShortcutStartupActivity.unRegisterActions(instance.getCustomActionModels());
 
-		gui.getData(instance);
+        gui.getData(instance);
 
-		ShortcutStartupActivity.registerActions();
-	}
+        ShortcutStartupActivity.registerActions();
+    }
 
-	@Override
-	public void reset() {
-		gui.setData(instance);
-	}
+    @Override
+    public void reset() {
+        gui.setData(instance);
+    }
 }

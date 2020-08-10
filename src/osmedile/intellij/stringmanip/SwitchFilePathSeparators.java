@@ -9,21 +9,15 @@ import java.util.Map;
 
 public class SwitchFilePathSeparators extends AbstractStringManipAction<Object> {
 
+    private SwitchTo replaceOperation = SwitchTo.op_Unknown;
+
     protected SwitchFilePathSeparators() {
     }
+
 
     protected SwitchFilePathSeparators(boolean setupHandler) {
         super(setupHandler);
     }
-
-
-    enum SwitchTo {
-        op_Unknown,
-        op_SlashToBackslash,
-        op_BackslashToSlash
-    }
-
-    private SwitchTo replaceOperation = SwitchTo.op_Unknown;
 
     @NotNull
     @Override
@@ -32,8 +26,8 @@ public class SwitchFilePathSeparators extends AbstractStringManipAction<Object> 
         return super.beforeWriteAction(editor, dataContext);
     }
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
         String s1;
         if (replaceOperation == SwitchTo.op_Unknown) {
             int fslash = s.indexOf('/');
@@ -50,10 +44,10 @@ public class SwitchFilePathSeparators extends AbstractStringManipAction<Object> 
         }
         switch (replaceOperation) {
             case op_SlashToBackslash:
-            s1 = s.replace("/", "\\");
+                s1 = s.replace("/", "\\");
                 break;
             case op_BackslashToSlash:
-            s1 = s.replace("\\", "/");
+                s1 = s.replace("\\", "/");
                 break;
             case op_Unknown:
             default:
@@ -61,5 +55,11 @@ public class SwitchFilePathSeparators extends AbstractStringManipAction<Object> 
                 break;
         }
         return s1;
-	}
+    }
+
+    enum SwitchTo {
+        op_Unknown,
+        op_SlashToBackslash,
+        op_BackslashToSlash
+    }
 }

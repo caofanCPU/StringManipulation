@@ -10,8 +10,8 @@ import java.util.Map;
  */
 public class UnescapeXMLAction extends AbstractStringManipAction<Object> {
 
-	@Override                                                                                                 
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		return shaded.org.apache.commons.text.StringEscapeUtils.unescapeXml(s);
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        return shaded.org.apache.commons.text.StringEscapeUtils.unescapeXml(s);
     }
 }

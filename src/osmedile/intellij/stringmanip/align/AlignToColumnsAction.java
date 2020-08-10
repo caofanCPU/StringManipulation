@@ -16,30 +16,30 @@ import java.util.List;
 public class AlignToColumnsAction extends MyEditorAction {
 
 
-	protected AlignToColumnsAction() {
-		this(true);
-	}
+    protected AlignToColumnsAction() {
+        this(true);
+    }
 
-	protected AlignToColumnsAction(boolean setupHandler) {
-		super(null);
-		if (setupHandler) {
-			this.setupHandler(new MultiCaretHandlerHandler<ColumnAlignerModel>(getActionClass()) {
+    protected AlignToColumnsAction(boolean setupHandler) {
+        super(null);
+        if (setupHandler) {
+            this.setupHandler(new MultiCaretHandlerHandler<ColumnAlignerModel>(getActionClass()) {
 
-				@NotNull
-				@Override
+                @NotNull
+                @Override
                 protected Pair<Boolean, ColumnAlignerModel> beforeWriteAction(Editor editor, DataContext dataContext) {
-					PluginPersistentStateComponent stateComponent = PluginPersistentStateComponent.getInstance();
-					final AlignToColumnsForm alignToColumnsForm = new AlignToColumnsForm(stateComponent.guessModel(editor), editor);
-					DialogWrapper dialogWrapper = new DialogWrapper(editor.getProject()) {
-						{
-							init();
-							setTitle("Align to Columns");
-						}
+                    PluginPersistentStateComponent stateComponent = PluginPersistentStateComponent.getInstance();
+                    final AlignToColumnsForm alignToColumnsForm = new AlignToColumnsForm(stateComponent.guessModel(editor), editor);
+                    DialogWrapper dialogWrapper = new DialogWrapper(editor.getProject()) {
+                        {
+                            init();
+                            setTitle("Align to Columns");
+                        }
 
-						@Nullable
-						@Override
-						public JComponent getPreferredFocusedComponent() {
-							return alignToColumnsForm.getPreferredFocusedComponent();
+                        @Nullable
+                        @Override
+                        public JComponent getPreferredFocusedComponent() {
+                            return alignToColumnsForm.getPreferredFocusedComponent();
                         }
 
                         @Nullable
@@ -52,38 +52,38 @@ public class AlignToColumnsAction extends MyEditorAction {
                         @Nullable
                         @Override
                         protected JComponent createCenterPanel() {
-							return alignToColumnsForm.root;
+                            return alignToColumnsForm.root;
                         }
 
-						@Override
-						protected void doOKAction() {
-							super.doOKAction();
-						}
-					};
+                        @Override
+                        protected void doOKAction() {
+                            super.doOKAction();
+                        }
+                    };
 
-					if (!dialogWrapper.showAndGet()) {
-						return stopExecution();
-					}
+                    if (!dialogWrapper.showAndGet()) {
+                        return stopExecution();
+                    }
 
-					ColumnAlignerModel model = alignToColumnsForm.getModel();
-					stateComponent.addToHistory(alignToColumnsForm.getModel());
-					return continueExecution(model);
-				}
+                    ColumnAlignerModel model = alignToColumnsForm.getModel();
+                    stateComponent.addToHistory(alignToColumnsForm.getModel());
+                    return continueExecution(model);
+                }
 
-				@Override
+                @Override
                 protected String processSingleSelection(String text, ColumnAlignerModel model) {
                     return new ColumnAligner(model).align(text);
-				}
+                }
 
                 @Override
                 protected List<String> processMultiSelections(List<String> lines, ColumnAlignerModel model) {
                     return new ColumnAligner(model).align(lines);
-				}
+                }
 
             });
-		}
+        }
 
-	}
+    }
 
 
 }

@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class EscapeSQLAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
         return StringEscapeUtil.escapeSql(s);
     }
 }

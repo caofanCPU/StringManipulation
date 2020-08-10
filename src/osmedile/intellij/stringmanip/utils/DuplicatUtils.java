@@ -44,12 +44,12 @@ public class DuplicatUtils {
      * The string is parsed using NumberUtils.createNumber() and NumberUtils.createDouble()
      *
      * @param str
-     *
      * @return
      */
     public static String simpleInc(String str) {
         return simpleAddition(str, 1);
     }
+
     public static String simpleInc(Number str) {
         return simpleAddition(str, 1);
     }
@@ -60,27 +60,26 @@ public class DuplicatUtils {
      *
      * @param str
      * @param add
-     *
      * @return
      */
     public static String simpleAddition(final String str, final int add) {
         Number number = getNumber(str);
-         if (number != null) {
-             return simpleAddition(number, add);
-         } else {
-             return str;
-         }
+        if (number != null) {
+            return simpleAddition(number, add);
+        } else {
+            return str;
+        }
     }
 
     public static String simpleAddition(Number number, int add) {
         Number n;
         if (number instanceof Float) {
-			n = number.floatValue() + add;
-		} else if (number instanceof Double) {
-			n = number.doubleValue() + add;
-		} else {
-			n = number.intValue() + add;
-		}
+            n = number.floatValue() + add;
+        } else if (number instanceof Double) {
+            n = number.doubleValue() + add;
+        } else {
+            n = number.intValue() + add;
+        }
         return n.toString();
     }
 

@@ -6,10 +6,10 @@ import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.DumbAwareAction;
 
 public class OpenSettingsAction extends DumbAwareAction {
-	private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(OpenSettingsAction.class);
+    private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(OpenSettingsAction.class);
 
-	@Override
-	public void actionPerformed(AnActionEvent e) {
-		ShowSettingsUtil.getInstance().showSettingsDialog(e.getProject(), "String Manipulation");
-	}
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        ShowSettingsUtil.getInstance().showSettingsDialog(e.getProject(), "String Manipulation");
+    }
 }

@@ -14,9 +14,9 @@ public class ToWordLowercaseOrToCamelCaseAction extends AbstractCaseConvertingAc
     public String transformByLine(Map<String, Object> actionContext, String s) {
         Style from = getStyle(actionContext, s);
         if (from != Style.WORD_LOWERCASE) {
-            return Style.WORD_LOWERCASE.transform( s);
+            return Style.WORD_LOWERCASE.transform(s);
         } else {
-            return Style.CAMEL_CASE.transform( s);
+            return Style.CAMEL_CASE.transform(s);
         }
     }
 }

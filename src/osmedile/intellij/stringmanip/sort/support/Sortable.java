@@ -1,7 +1,7 @@
 package osmedile.intellij.stringmanip.sort.support;
 
 public interface Sortable {
-	String getTextForComparison();
+    String getTextForComparison();
 
-	String getText();
+    String getText();
 }

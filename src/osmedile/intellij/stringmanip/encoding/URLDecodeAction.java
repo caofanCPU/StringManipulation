@@ -9,13 +9,13 @@ import java.util.Map;
 
 public class URLDecodeAction extends AbstractStringManipAction<Object> {
 
-	@Override
-	protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, Object additionalParam) {
-		return EncodingUtils.decodeUrl(selectedText);
-	}
+    @Override
+    protected String transformSelection(Editor editor, Map<String, Object> actionContext, DataContext dataContext, String selectedText, Object additionalParam) {
+        return EncodingUtils.decodeUrl(selectedText);
+    }
 
-	@Override
-	public String transformByLine(Map<String, Object> actionContext, String s) {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public String transformByLine(Map<String, Object> actionContext, String s) {
+        throw new UnsupportedOperationException();
+    }
 }

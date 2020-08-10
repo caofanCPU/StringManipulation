@@ -13,34 +13,33 @@ import javax.swing.event.HyperlinkEvent;
 
 
 public class WhatsNewPopup {
-	public static final NotificationGroup NOTIFICATION = new NotificationGroup("String Manipulation",
-		NotificationDisplayType.STICKY_BALLOON, true);
-	
-	private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(WhatsNewPopup.class);
-	protected static final int CURRENT_VERSION = 2;
+    public static final NotificationGroup NOTIFICATION = new NotificationGroup("String Manipulation",
+            NotificationDisplayType.STICKY_BALLOON, true);
+    protected static final int CURRENT_VERSION = 2;
+    private static final Logger LOG = com.intellij.openapi.diagnostic.Logger.getInstance(WhatsNewPopup.class);
 
-	public static void whatsNewCheck(Editor editor) {
-		popup(PluginPersistentStateComponent.getInstance(), editor.getProject());
-	}
+    public static void whatsNewCheck(Editor editor) {
+        popup(PluginPersistentStateComponent.getInstance(), editor.getProject());
+    }
 
-	public static void popup(PluginPersistentStateComponent stateComponent, final Project project) {
-		if (stateComponent.getVersion() < CURRENT_VERSION) {
-			stateComponent.setVersion(CURRENT_VERSION);
+    public static void popup(PluginPersistentStateComponent stateComponent, final Project project) {
+        if (stateComponent.getVersion() < CURRENT_VERSION) {
+            stateComponent.setVersion(CURRENT_VERSION);
 
-			ApplicationManager.getApplication().invokeLater(() -> {
-				Notification notification = NOTIFICATION.createNotification("String Manipulation popup", "You can now customize 'Switch Case' action or add your own via <a href=\"#\">Settings | Other Settings | String Manipulation</a>", NotificationType.INFORMATION,
-					new NotificationListener.UrlOpeningListener(true) {
-						@Override
-						protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
-							ApplicationManager.getApplication().invokeLater(() -> {
-								ShowSettingsUtil.getInstance().showSettingsDialog(project, "String Manipulation");
+            ApplicationManager.getApplication().invokeLater(() -> {
+                Notification notification = NOTIFICATION.createNotification("String Manipulation popup", "You can now customize 'Switch Case' action or add your own via <a href=\"#\">Settings | Other Settings | String Manipulation</a>", NotificationType.INFORMATION,
+                        new NotificationListener.UrlOpeningListener(true) {
+                            @Override
+                            protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
+                                ApplicationManager.getApplication().invokeLater(() -> {
+                                    ShowSettingsUtil.getInstance().showSettingsDialog(project, "String Manipulation");
 
-							});
-						}
-					});
+                                });
+                            }
+                        });
 
-				Notifications.Bus.notify(notification);
-			});
-		}
-	}
+                Notifications.Bus.notify(notification);
+            });
+        }
+    }
 }
